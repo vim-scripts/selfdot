@@ -1,0 +1,10 @@
+This is a mirror of http://www.vim.org/scripts/script.php?script_id=2911
+
+Typing "self." can be annoying, mistyping -- even more.  This plugin
+lets you save keystrokes by expanding "." into "self." in places where
+putting a dot is a syntax error, e.g. at the beginning of an indented
+line or right after an operator.
+
+Confusing version numbers: calling the first release v1.0 was
+a mistake, so I renamed v1.0.3 to v0.1.3
+
