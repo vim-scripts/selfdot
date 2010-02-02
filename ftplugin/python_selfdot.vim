@@ -1,9 +1,9 @@
 " Vim Python filetype plugin for typing `self.` by pressing `.`
 "
-" Version:     1.0.2
-" Maintainer:  Maciej Konieczny <hello@narf.pl>
-" Homepage:    http://github.com/narfdotpl/selfdot.vim
-" License:     This file is placed in the public domain.
+" Version:  1.0.3
+" Website:  http://github.com/narfdotpl/selfdot.vim
+" License:  public domain <http://unlicense.org/>
+" Author:   Maciej Konieczny <hello@narf.pl>
 
 
 " don't load twice
@@ -17,11 +17,11 @@ let s:save_cpo = &cpo
 set cpo&vim
 
 
-let s:PREFIXES = [' ', '\t', '(', '[', '{', '=', '>', '<', '+', '-', '*', '/',
+let s:PREFIXES = [' ', "\t", '(', '[', '{', '=', '>', '<', '+', '-', '*', '/',
                 \ '%', '&', '|', '~', ',', ';', ':', '@', '`', '#']
 
-if !exists('*s:DotToSelfdot')
-    function s:DotToSelfdot()
+if !exists('*s:DotOrSelfdot')
+    function s:DotOrSelfdot()
         let prev_char = getline('.')[col('.') - 2]
 
         for prefix in s:PREFIXES
@@ -34,7 +34,7 @@ if !exists('*s:DotToSelfdot')
     endfunction
 endif
 
-inoremap <buffer> <expr> . <SID>DotToSelfdot()
+inoremap <buffer> <expr> . <SID>DotOrSelfdot()
 
 
 " restore cpoptions (`:set compatible` stuff)
