@@ -3,7 +3,7 @@
 "
 " Vim plugin that lets you type `self.` by pressing `.` in Python files.
 "
-" Version:  0.2.1
+" Version:  0.2.2
 " Website:  https://github.com/narfdotpl/selfdot.vim
 " License:  public domain <http://unlicense.org/>
 " Author:   Maciej Konieczny <hello@narf.pl>
@@ -32,9 +32,9 @@ if !exists('*s:DotOrSelfdot')
         let y = line('.')
 
         " is cursor at string or comment?
-        let syntax_item_name = synIDattr(synIDtrans(synID(y, x, 0)), 'name')
-        if syntax_item_name == 'String' ||
-         \ syntax_item_name == 'Comment'
+        let syntax_item_name = synIDattr(synID(y, x, 0), 'name')
+        if syntax_item_name == 'pythonString' ||
+         \ syntax_item_name == 'pythonComment'
             return '.'
         endif
 
