@@ -3,7 +3,7 @@
 "
 " Vim plugin that lets you type `self.` by pressing `.` in Python files.
 "
-" Version:  0.2.2
+" Version:  0.2.3
 " Website:  https://github.com/narfdotpl/selfdot.vim
 " License:  public domain <http://unlicense.org/>
 " Author:   Maciej Konieczny <hello@narf.pl>
@@ -21,9 +21,16 @@ set cpo&vim
 
 " don't define twice
 if !exists('*s:DotOrSelfdot')
-    " list valid `self.` prefixes
-    let s:prefixes = ['(', '[', '{', '=', '>', '<', '+', '-', '*', '/', '%',
-                    \ '&', '|', '^', '~', ',', ';', ':', '@']
+    " list characters that can precede `self.`
+    let s:selfdot_chars = ['(', '[', '{', '=', '>', '<', '+', '-', '*', '/',
+                         \ '%', '&', '|', '^', '~', ',', ';', ':']
+
+    " list syntax names of items that can precede `self.`
+    let s:selfdot_names = ['pythonConditional', 'pythonDecorator',
+                         \ 'pythonOperator', 'pythonRepeat', 'pythonStatement']
+
+    " list string and comment syntax item names
+    let s:dot_names = ['pythonString', 'pythonRawString', 'pythonComment']
 
     " return `.` or `self.` depending on context
     function s:DotOrSelfdot()
@@ -33,8 +40,7 @@ if !exists('*s:DotOrSelfdot')
 
         " is cursor at string or comment?
         let syntax_item_name = synIDattr(synID(y, x, 0), 'name')
-        if syntax_item_name == 'pythonString' ||
-         \ syntax_item_name == 'pythonComment'
+        if index(s:dot_names, syntax_item_name) >= 0
             return '.'
         endif
 
@@ -53,17 +59,17 @@ if !exists('*s:DotOrSelfdot')
             let p = getline(p_y)[p_x - 1]
         endif
 
-        " is `p` part of statement keyword?
-        if synIDattr(synIDtrans(synID(p_y, p_x, 0)), 'name') == 'Statement'
+        " is `p` part of syntax item that can precede `self.`?
+        let syntax_item_name = synIDattr(synID(p_y, p_x, 0), 'name')
+        if index(s:selfdot_names, syntax_item_name) >= 0
             return 'self.'
         endif
 
-        " is `p` one of prefixes?
-        for prefix in s:prefixes
-            if p == prefix
-                return 'self.'
-            endif
-        endfor
+        " is `p` one of characters that can precede `self.`?
+        if index(s:selfdot_chars, p) >= 0
+            return 'self.'
+        endif
+
         return '.'
     endfunction
 endif
